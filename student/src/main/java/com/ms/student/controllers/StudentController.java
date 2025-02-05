@@ -17,6 +17,11 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    @GetMapping
+    public Iterable<Student> getStudents() {
+        return studentService.all();
+    }
+
     @GetMapping("/{id}")
     public StudentDto getStudent(@PathVariable String id) {
         return studentService.find(id);

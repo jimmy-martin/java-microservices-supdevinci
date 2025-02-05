@@ -12,12 +12,16 @@ import com.ms.student.repositories.StudentRepository;
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
-    private RestTemplate msSchoolRestTemplate;
+    private final RestTemplate msSchoolRestTemplate;
 
     @Autowired
     public StudentService(StudentRepository studentRepository, RestTemplate msSchoolRestTemplate) {
         this.studentRepository = studentRepository;
         this.msSchoolRestTemplate = msSchoolRestTemplate;
+    }
+
+    public Iterable<Student> all() {
+        return studentRepository.findAll();
     }
 
     public StudentDto find(String id) {
