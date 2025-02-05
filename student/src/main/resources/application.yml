@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: student
+  data:
+    mongodb:
+      uri: mongodb://localhost/student
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+server:
+  port: 8081
