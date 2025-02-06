@@ -12,12 +12,14 @@ import com.ms.auth.services.JwtService;
 @RequestMapping("/jwt")
 public class JwtController {
     @GetMapping("/generate")
-    public String generateToken(@RequestParam String id, @RequestParam String username) {
-        return JwtService.generateToken(id, username);
+    public String generateToken(@RequestParam String username) {
+        System.out.println("Generating token for " + username);
+        return JwtService.generateToken(username);
     }
 
     @GetMapping("/validate")
     public boolean validateToken(@RequestParam String token) {
+        System.out.println("Validating token " + token);
         return JwtService.validateToken(token);
     }
 

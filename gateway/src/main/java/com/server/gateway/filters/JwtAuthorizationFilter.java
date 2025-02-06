@@ -1,33 +1,27 @@
 package com.server.gateway.filters;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ServerWebExchange;
 
 import reactor.core.publisher.Mono;
 
+@Component
 public class JwtAuthorizationFilter extends AbstractGatewayFilterFactory<JwtAuthorizationFilter.Config> {
-    private RestTemplate msAuthRestTemplate;
+    private final RestTemplate msAuthRestTemplate;
 
     @Autowired
-    public JwtAuthorizationFilter(RestTemplateBuilder builder, DiscoveryClient discoveryClient) {
+    public JwtAuthorizationFilter(RestTemplate msAuthRestTemplate) {
         super(Config.class);
 
-        ServiceInstance serviceInstance = discoveryClient.getInstances("AUTH").getFirst();
-        String baseUrl = serviceInstance.getUri().toString();
-
-        this.msAuthRestTemplate = builder.rootUri(baseUrl).build();
+        this.msAuthRestTemplate = msAuthRestTemplate;
     }
 
     public static class Config {
@@ -44,9 +38,12 @@ public class JwtAuthorizationFilter extends AbstractGatewayFilterFactory<JwtAuth
             }
 
             String authorizationHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).getFirst();
-            String jwt = authorizationHeader.replace("Bearer", "");
+            String jwt = authorizationHeader.replace("Bearer ", "");
+            String url = "/jwt/validate?token=" + jwt;
 
-            boolean isValid = msAuthRestTemplate.getForObject("/validate?token=" + jwt, Boolean.class);
+            System.out.println("Calling " + url);
+
+            boolean isValid = Boolean.TRUE.equals(msAuthRestTemplate.getForObject(url, Boolean.class));
 
             if (!isValid) {
                 return onError(exchange, "Token is not valid", HttpStatus.UNAUTHORIZED);
@@ -56,9 +53,13 @@ public class JwtAuthorizationFilter extends AbstractGatewayFilterFactory<JwtAuth
         };
     }
 
-    private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
+    private Mono<Void> onError(ServerWebExchange exchange, String errorMessage, HttpStatus httpStatus) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
-        return response.setComplete();
+        response.getHeaders().add(HttpHeaders.CONTENT_TYPE, "application/json");
+
+        String json = "{\"error\": \"" + errorMessage + "\"}";
+
+        return response.writeWith(Mono.just(response.bufferFactory().wrap(json.getBytes())));
     }
 }

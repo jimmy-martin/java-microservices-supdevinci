@@ -12,7 +12,7 @@ public class JwtService {
     public static Long defaultExpirationTimeInMs = 86400000L;
     public static SecretKey secretKey = Jwts.SIG.HS256.key().build();
 
-    public static String generateToken(String id, String subject) {
+    public static String generateToken(String subject) {
         Instant now = Instant.now();
 
         return Jwts.builder()
@@ -27,6 +27,7 @@ public class JwtService {
     public static boolean validateToken(String token) {
         try {
             Jwts.parser().verifyWith(secretKey).build().parse(token);
+
             return true;
         } catch (Exception e) {
             return false;

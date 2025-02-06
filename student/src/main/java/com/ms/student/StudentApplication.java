@@ -19,8 +19,12 @@ public class StudentApplication {
 
     @Bean
     public RestTemplate msSchoolRestTemplate(RestTemplateBuilder builder, DiscoveryClient discoveryClient) {
-        ServiceInstance serviceInstance = discoveryClient.getInstances("SCHOOL").getFirst();
+        ServiceInstance serviceInstance = discoveryClient.getInstances("SCHOOL").stream()
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("Service SCHOOL not found"));
+
         String baseUrl = serviceInstance.getUri().toString();
+
         return builder
                 .rootUri(baseUrl)
                 .build();
