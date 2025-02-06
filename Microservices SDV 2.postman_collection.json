@@ -1,0 +1,137 @@
+{
+	"info": {
+		"_postman_id": "8bbbfb69-42c4-4813-a5ab-93c17f0c151a",
+		"name": "Microservices SDV",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "23119199"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Get JWT",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8123/jwt/generate?username=jimmy",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8123",
+							"path": [
+								"jwt",
+								"generate"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "jimmy"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate JWT",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8123/jwt/validate?token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI5YWU0MzhmYi0xMzQ2LTQ4OWQtYmY1NC0yNWU5MzRjYjg0YmYiLCJzdWIiOiJqaW1teSIsImlhdCI6MTczODg0ODg5NCwiZXhwIjoxNzM4OTM1Mjk0fQ.-P1gMgtm_NksNrHnKWhbvpAw3KAwBXILrl9g0bk4a3U",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8123",
+							"path": [
+								"jwt",
+								"validate"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI5YWU0MzhmYi0xMzQ2LTQ4OWQtYmY1NC0yNWU5MzRjYjg0YmYiLCJzdWIiOiJqaW1teSIsImlhdCI6MTczODg0ODg5NCwiZXhwIjoxNzM4OTM1Mjk0fQ.-P1gMgtm_NksNrHnKWhbvpAw3KAwBXILrl9g0bk4a3U"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Decode JWT",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8123/jwt/decode?token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlODViMTgxNC02ZDIxLTQxMTItYmE4My05ZDhhNTE5NzQ5MmIiLCJzdWIiOiJqaW1teSIsImlhdCI6MTczODg0Nzk4OSwiZXhwIjoxNzM4OTM0Mzg5fQ.vtRODMFBQM0dXgEN3aBC6Ku-TBWXZ9KgP5Nh7m2Xzpw",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8123",
+							"path": [
+								"jwt",
+								"decode"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJlODViMTgxNC02ZDIxLTQxMTItYmE4My05ZDhhNTE5NzQ5MmIiLCJzdWIiOiJqaW1teSIsImlhdCI6MTczODg0Nzk4OSwiZXhwIjoxNzM4OTM0Mzg5fQ.vtRODMFBQM0dXgEN3aBC6Ku-TBWXZ9KgP5Nh7m2Xzpw"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gateway",
+			"item": [
+				{
+					"name": "Get JWT",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get schools",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJhMjRiMjdlNy0zMWVhLTQ3YWYtYjM3YS00OTgyYWZjMjUwNDYiLCJzdWIiOiJqaW1teSIsImlhdCI6MTczODg0OTc0MSwiZXhwIjoxNzM4OTM2MTQxfQ.hjIZDWkLPW4yyCyGz6B1d9BL_opH8o_A8j0pDiEkDA8",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:8871/schools"
+					},
+					"response": []
+				},
+				{
+					"name": "Get school",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get student",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
